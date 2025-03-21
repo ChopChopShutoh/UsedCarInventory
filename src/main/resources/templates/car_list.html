@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>中古車在庫管理</title>
+</head>
+<body>
+    <h1>車両一覧</h1>
+    <a href="/cars/new">新規車両追加</a>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>車台番号</th>
+            <th>車種</th>
+            <th>メーカー</th>
+            <th>入庫日</th>
+            <th>仕入原価</th>
+            <th>販売価格</th>
+            <th>粗利</th>
+            <th>操作</th>
+        </tr>
+        <tr th:each="car : ${cars}">
+            <td th:text="${car.id}"></td>
+            <td th:text="${car.chassisNumber}"></td>
+            <td th:text="${car.model}"></td>
+            <td th:text="${car.manufacturer}"></td>
+            <td th:text="${car.stockDate}"></td>
+            <td th:text="${#numbers.formatDecimal(car.totalCost, 1, 0)}"></td>
+            <td th:text="${#numbers.formatDecimal(car.salePrice, 1, 0)}"></td>
+            <td th:text="${#numbers.formatDecimal(car.grossProfit, 1, 0)}"></td>
+            <td>
+                <a th:href="@{/cars/edit/{id}(id=${car.id})}">編集</a>
+                <a th:href="@{/cars/delete/{id}(id=${car.id})}">削除</a>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
