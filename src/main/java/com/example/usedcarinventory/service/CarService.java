@@ -24,6 +24,7 @@ public class CarService {
     }
 
     public Car saveCar(Car car) {
+    	// 原価計算
         // 粗利計算
         double totalCost = car.getBaseCost() + car.getRecycleFee() + 
                           car.getTransportFee() + car.getRepairFee();

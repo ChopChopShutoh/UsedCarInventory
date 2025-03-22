@@ -3,80 +3,113 @@
 <head>
     <title>車両情報入力</title>
     <style>
-        label { display: inline-block; width: 150px; margin: 5px 0; }
-        input, select { width: 200px; }
-        .error { color: red; }
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { color: #333; text-align: center; }
+        h2 { color: #555; margin-bottom: 10px; }
+        .container { display: flex; justify-content: space-between; max-width: 1200px; margin: 0 auto; }
+        .column { flex: 1; margin: 0 10px; }
+        label { display: block; margin: 10px 0; font-weight: bold; }
+        input, select { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+        .error { color: red; font-size: 0.9em; display: block; margin-top: 2px; }
+        .buttons { text-align: center; margin-top: 20px; }
+        button, a.button { display: inline-block; width: 120px; padding: 10px; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; text-align: center; font-size: 16px; }
+        button.save { background-color: #28a745; color: white; }
+        button.save:hover { background-color: #218838; }
+        a.cancel { background-color: #dc3545; color: white; }
+        a.cancel:hover { background-color: #c82333; }
+        button.delete { background-color: #dc3545; color: white; margin-left: 50px; }
+        button.delete:hover { background-color: #c82333; }
+        .required { color: red; font-size: 0.9em; margin-left: 5px; }
     </style>
+    <script>
+        function confirmDelete(id) {
+    		if (confirm("削除してよろしいですか？")) {
+        		window.location.href = "/cars/delete/" + id;
+    		}
+	}
+    </script>
 </head>
 <body>
     <h1>車両情報</h1>
     <form th:action="@{/cars}" th:object="${car}" method="post">
         <input type="hidden" th:field="*{id}" />
-        <!-- 車両の基本情報 -->
-        <h2>車両の基本情報</h2>
-        <label>車台番号: <input type="text" th:field="*{chassisNumber}" /></label>
-        <span class="error" th:errors="*{chassisNumber}"></span><br/>
-        <label>車種: <input type="text" th:field="*{model}" /></label>
-        <span class="error" th:errors="*{model}"></span><br/>
-        <label>メーカー: <input type="text" th:field="*{manufacturer}" /></label>
-        <span class="error" th:errors="*{manufacturer}"></span><br/>
-        <label>型式: <input type="text" th:field="*{vehicleType}" /></label>
-        <span class="error" th:errors="*{vehicleType}"></span><br/>
-        <label>初度登録年月: <input type="date" th:field="*{firstRegistration}" /></label>
-        <span class="error" th:errors="*{firstRegistration}"></span><br/>
-        <label>車検満了日: <input type="date" th:field="*{inspectionExpiry}" /></label>
-        <span class="error" th:errors="*{inspectionExpiry}"></span><br/>
-        <label>走行距離: <input type="number" th:field="*{mileage}" /></label>
-        <span class="error" th:errors="*{mileage}"></span><br/>
-        <!-- 入庫情報 -->
-        <h2>入庫情報</h2>
-        <label>入庫日: <input type="date" th:field="*{stockDate}" /></label>
-        <span class="error" th:errors="*{stockDate}"></span><br/>
-        <label>入庫予定日: <input type="date" th:field="*{scheduledStockDate}" /></label><br/>
-        <label>入庫区分: 
-            <select th:field="*{stockType}">
-                <option value="">選択してください</option>
-                <option value="下取り">下取り</option>
-                <option value="買取">買取</option>
-                <option value="オークション">オークション</option>
-            </select>
-        </label>
-        <span class="error" th:errors="*{stockType}"></span><br/>
-        <label>仕入先名称: <input type="text" th:field="*{supplierName}" /></label>
-        <span class="error" th:errors="*{supplierName}"></span><br/>
-        <label>仕入担当者: <input type="text" th:field="*{buyerStaff}" /></label>
-        <span class="error" th:errors="*{buyerStaff}"></span><br/>
-        <!-- 販売情報 -->
-        <h2>販売情報</h2>
-        <label>契約日: <input type="date" th:field="*{contractDate}" /></label><br/>
-        <label>名義変更日: <input type="date" th:field="*{transferDate}" /></label><br/>
-        <label>納車日: <input type="date" th:field="*{deliveryDate}" /></label><br/>
-        <label>販売区分: 
-            <select th:field="*{saleType}">
-                <option value="">選択してください</option>
-                <option value="小売">小売</option>
-                <option value="業販">業販</option>
-                <option value="オークション">オークション</option>
-                <option value="廃車">廃車</option>
-            </select>
-        </label><br/>
-        <label>販売先名称: <input type="text" th:field="*{buyerName}" /></label><br/>
-        <label>販売担当者: <input type="text" th:field="*{sellerStaff}" /></label><br/>
-        <!-- 価格情報 -->
-        <h2>価格情報</h2>
-        <label>車両本体原価: <input type="number" step="1" th:field="*{baseCost}" /></label>
-        <span class="error" th:errors="*{baseCost}"></span><br/>
-        <label>リサイクル預託金: <input type="number" step="1" th:field="*{recycleFee}" /></label>
-        <span class="error" th:errors="*{recycleFee}"></span><br/>
-        <label>輸送費: <input type="number" step="1" th:field="*{transportFee}" /></label>
-        <span class="error" th:errors="*{transportFee}"></span><br/>
-        <label>加修費: <input type="number" step="1" th:field="*{repairFee}" /></label>
-        <span class="error" th:errors="*{repairFee}"></span><br/>
-        <label>販売価格: <input type="number" step="1" th:field="*{salePrice}" /></label>
-        <span class="error" th:errors="*{salePrice}"></span><br/>
-        <!-- 保存ボタン -->
-        <button type="submit">保存</button>
-        <a href="/cars">キャンセル</a>
+        <div class="container">
+            <div class="column">
+                <h2>車両の基本情報</h2>
+                <label>車台番号: <br><span class="required">必須</span><input type="text" th:field="*{chassisNumber}" /></label>
+                <span class="error" th:errors="*{chassisNumber}"></span>
+                <label>メーカー: <br><span class="required">必須</span><input type="text" th:field="*{manufacturer}" /></label>
+                <span class="error" th:errors="*{manufacturer}"></span>
+                <label>車種: <br><span class="required">必須</span><input type="text" th:field="*{model}" /></label>
+                <span class="error" th:errors="*{model}"></span>
+                <label>型式: <br><span class="required">必須</span><input type="text" th:field="*{vehicleType}" /></label>
+                <span class="error" th:errors="*{vehicleType}"></span>
+                <label>初度登録年月: <br><span class="required">必須</span><input type="date" th:field="*{firstRegistration}" /></label>
+                <span class="error" th:errors="*{firstRegistration}"></span>
+                <label>車検満了日: <br><span class="required">必須</span><input type="date" th:field="*{inspectionExpiry}" /></label>
+                <span class="error" th:errors="*{inspectionExpiry}"></span>
+                <label>走行距離: <input type="number" th:field="*{mileage}" /></label>
+                <span class="error" th:errors="*{mileage}"></span>
+            </div>
+            <div class="column">
+                <h2>入庫情報</h2>
+                <label>入庫日: <input type="date" th:field="*{stockDate}" /></label>
+                <label>入庫予定日: <br><span class="required">必須（不明の場合は予定月初を入力）</span><input type="date" th:field="*{scheduledStockDate}" /></label>
+                <span class="error" th:errors="*{scheduledStockDate}"></span>
+                <label>入庫区分: <br><span class="required">必須</span>
+                    <select th:field="*{stockType}">
+                        <option value="">選択してください</option>
+                        <option value="下取り">下取り</option>
+                        <option value="買取">買取</option>
+                        <option value="オークション">オークション</option>
+                    </select>
+                </label>
+                <span class="error" th:errors="*{stockType}"></span>
+                <label>仕入先名称: <br><span class="required">必須</span><input type="text" th:field="*{supplierName}" /></label>
+                <span class="error" th:errors="*{supplierName}"></span>
+                <label>仕入担当者: <br><span class="required">必須</span><input type="text" th:field="*{buyerStaff}" /></label>
+                <span class="error" th:errors="*{buyerStaff}"></span>
+            </div>
+            <div class="column">
+                <h2>販売情報</h2>
+                <label>契約日: <input type="date" th:field="*{contractDate}" /></label>
+                <label>名義変更日: <input type="date" th:field="*{transferDate}" /></label>
+                <label>納車日: <input type="date" th:field="*{deliveryDate}" /></label>
+                <label>販売区分: 
+                    <select th:field="*{saleType}">
+                        <option value="">選択してください</option>
+                        <option value="小売">小売</option>
+                        <option value="業販">業販</option>
+                        <option value="オークション">オークション</option>
+                        <option value="廃車">廃車</option>
+                    </select>
+                </label>
+                <label>販売先名称: <input type="text" th:field="*{buyerName}" /></label>
+                <label>販売担当者: <input type="text" th:field="*{sellerStaff}" /></label>
+            </div>
+            <div class="column">
+                <h2>価格情報</h2>
+                <label>車両本体原価: <input type="number" step="1" name="baseCost" th:value="${car.baseCost != null ? #numbers.formatDecimal(car.baseCost, 1, 0) : ''}" /></label>
+                <span class="error" th:errors="*{baseCost}"></span>
+                <label>リサイクル預託金: <input type="number" step="1" name="recycleFee" th:value="${car.recycleFee != null ? #numbers.formatDecimal(car.recycleFee, 1, 0) : ''}" /></label>
+                <span class="error" th:errors="*{recycleFee}"></span>
+                <label>輸送費: <input type="number" step="1" name="transportFee" th:value="${car.transportFee != null ? #numbers.formatDecimal(car.transportFee, 1, 0) : ''}" /></label>
+                <span class="error" th:errors="*{transportFee}"></span>
+                <label>加修費: <input type="number" step="1" name="repairFee" th:value="${car.repairFee != null ? #numbers.formatDecimal(car.repairFee, 1, 0) : ''}" /></label>
+                <span class="error" th:errors="*{repairFee}"></span>
+                <label>仕入原価: <input type="text" th:value="${#numbers.formatDecimal(car.totalCost, 1,'COMMA',0,'POINT' )}" readonly="readonly" /></label>
+                <label>販売価格: <input type="number" step="1" name="salePrice" th:value="${car.salePrice != null ? #numbers.formatDecimal(car.salePrice, 1, 0) : ''}" /></label>
+                <span class="error" th:errors="*{salePrice}"></span>
+                <label>粗利: <input type="text" th:value="${#numbers.formatDecimal(car.grossProfit, 1,'COMMA',0,'POINT' )}" readonly="readonly" /></label>
+            </div>
+        </div>
+        <div class="buttons">
+            <button type="submit" class="save">保存</button>
+            <a href="/cars" class="cancel button">キャンセル</a>
+            <!-- 削除ボタン（編集画面でのみ表示） -->
+ 			<button th:if="${car.id != null}" type="button" class="delete" 
+                    th:onclick="'javascript:confirmDelete(' + ${car.id} + ')'">削除</button>
+        </div>
     </form>
 </body>
 </html>

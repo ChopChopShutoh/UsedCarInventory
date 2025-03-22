@@ -2,6 +2,8 @@ package com.example.usedcarinventory.model;
 
 import java.time.LocalDate;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -35,20 +37,24 @@ public class Car {
 
     @NotNull(message = "初度登録年月は必須です")
     @PastOrPresent(message = "初度登録年月は過去または今日でなければなりません")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate firstRegistration; // 初度登録年月
 
     @NotNull(message = "車検満了日は必須です")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate inspectionExpiry; // 車検満了日
 
     @Min(value = 0, message = "走行距離は0以上でなければなりません")
     private int mileage; // 走行距離
 
     // 入庫情報
-    @NotNull(message = "入庫日は必須です")
     @PastOrPresent(message = "入庫日は過去または今日でなければなりません")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate stockDate; // 入庫日
 
-    private LocalDate scheduledStockDate; // 入庫予定日（任意）
+    @NotNull(message = "入庫予定日は必須です")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate scheduledStockDate; // 入庫予定日
 
     @NotBlank(message = "入庫区分は必須です")
     private String stockType; // 入庫区分（下取り、買取、オークション）
@@ -60,10 +66,13 @@ public class Car {
     private String buyerStaff; // 仕入担当者
 
     // 販売情報
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate contractDate; // 契約日（任意）
-
+    
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate transferDate; // 名義変更日（任意）
-
+    
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate deliveryDate; // 納車日（任意）
 
     private String saleType; // 販売区分（小売、業販、オークション、廃車）（任意）

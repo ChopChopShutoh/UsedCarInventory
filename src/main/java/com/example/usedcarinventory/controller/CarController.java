@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.usedcarinventory.model.Car;
 import com.example.usedcarinventory.service.CarService;
@@ -38,27 +39,29 @@ public class CarController {
 
     // 編集フォーム
     @GetMapping("/edit/{id}")
-    public String editCarForm(@PathVariable Long id, Model model) {
-        Car car = carService.getCarById(id).orElse(new Car());
+    public String showEditForm(@PathVariable Long id, Model model) {
+        Car car = carService.getCarById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Invalid car Id:" + id));
         model.addAttribute("car", car);
         return "car_form";
-    }
+        }
 
     // 保存
     @PostMapping
-    public String saveCar(@Valid @ModelAttribute Car car, BindingResult result, Model model) {
+    public String saveCar(@Valid @ModelAttribute("car") Car car, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
-            model.addAttribute("car", car);
-            return "car_form"; // エラーがある場合はフォームに戻る
+            return "car_form"; // エラーがある場合、フォームに戻る
         }
         carService.saveCar(car);
+        redirectAttributes.addFlashAttribute("message", "保存しました");
         return "redirect:/cars";
     }
 
     // 削除
     @GetMapping("/delete/{id}")
-    public String deleteCar(@PathVariable Long id) {
+    public String deleteCar(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         carService.deleteCar(id);
+        redirectAttributes.addFlashAttribute("message", "車両を削除しました");
         return "redirect:/cars";
     }
 }
