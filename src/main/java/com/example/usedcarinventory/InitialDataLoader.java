@@ -34,7 +34,7 @@ public class InitialDataLoader implements CommandLineRunner {
                     "2T1BR32E76C123456", "カローラ", "トヨタ", "5BA-MZEA17",
                     LocalDate.of(2019, 8, 20), LocalDate.of(2024, 8, 19), 45000,
                     LocalDate.of(2023, 2, 15), LocalDate.of(2023, 2, 10), "買取",
-                    "中古車オークション", "高橋健太",
+                    "橋本五郎", "高橋健太",
                     null, null, null,
                     null, null, null,
                     800000, 40000, 25000, 15000, 950000
